@@ -1,7 +1,7 @@
 # encoding: UTF-8
 require 'ruby-hl7'
 class HL7::Message::Segment::AIG < HL7::Message::Segment
-  add_field :set_id
+  add_field :set_id, :idx => 1
   add_field :segment_action_code
   add_field :resource_id
   add_field :resource_type

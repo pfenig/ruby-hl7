@@ -2,7 +2,7 @@
 require 'ruby-hl7'
 class HL7::Message::Segment::PV1 < HL7::Message::Segment
   weight 2
-  add_field :set_id
+  add_field :set_id, :idx => 1
   add_field :patient_class
   add_field :assigned_location
   add_field :admission_type

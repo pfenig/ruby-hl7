@@ -2,7 +2,7 @@
 require 'ruby-hl7'
 class HL7::Message::Segment::SCH < HL7::Message::Segment
   weight 0 # should occur after the MSH segment
-  add_field :placer_appt_id
+  add_field :placer_appt_id, :idx => 1
   add_field :filler_appt_id
   add_field :occurrence_number
   add_field :placer_group_number

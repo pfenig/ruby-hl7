@@ -2,7 +2,7 @@
 require 'ruby-hl7'
 class HL7::Message::Segment::PD1 < HL7::Message::Segment
   weight 4
-  add_field :living_dependency
+  add_field :living_dependency, :idx => 1
   add_field :living_arrangement
   add_field :patient_primary_facility
   add_field :patient_primary_care_provider
