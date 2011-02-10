@@ -1,5 +1,4 @@
 # encoding: UTF-8
-require 'ruby-hl7'
 class HL7::Message::Segment::PD1 < HL7::Message::Segment
   weight 4
   add_field :living_dependency, :idx => 1

@@ -1,5 +1,4 @@
 # encoding: UTF-8
-require 'ruby-hl7'
 class HL7::Message::Segment::ORC < HL7::Message::Segment
   add_field :order_control
   add_field :placer_order_number
@@ -26,7 +25,7 @@ class HL7::Message::Segment::ORC < HL7::Message::Segment
   add_field :ordering_provider_address
   add_field :order_status_modifier
   add_field :advanced_beneficiary_notice_override_reason
-  add_field :fillers_expected_availability_date_time 
+  add_field :fillers_expected_availability_date_time
   add_field :confidentiality_code
   add_field :order_type
   add_field :enterer_authorization_mode
