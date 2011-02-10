@@ -78,6 +78,7 @@ class HL7::Message
   include Enumerable # we treat an hl7 2.x message as a collection of segments
   attr :element_delim
   attr :item_delim
+  attr :repetition_delim
   attr :segment_delim
 
   # setup a new hl7 message
@@ -88,6 +89,7 @@ class HL7::Message
     @segments_by_name = {}
     @item_delim = "^"
     @element_delim = '|'
+    @repetition_delim = '~'
     @segment_delim = "\r"
 
     parse( raw_msg ) if raw_msg
@@ -318,7 +320,7 @@ class HL7::Message
         # so lets just preserve the data
         kls = HL7::Message::Segment::Default
       end
-      new_seg = kls.new( elm, [@element_delim, @item_delim] )
+      new_seg = kls.new( elm, [@element_delim, @item_delim, @repetition_delim] )
       new_seg.segment_parent = self
 
       if last_seg && last_seg.respond_to?(:children) && last_seg.accepts?( seg_name )
@@ -362,6 +364,7 @@ class HL7::Message::Segment
   attr :segment_parent, true
   attr :element_delim
   attr :item_delim
+  attr :repetition_delim
   attr :segment_weight
 
   # setup a new HL7::Message::Segment
@@ -377,6 +380,7 @@ class HL7::Message::Segment
 
     @element_delim = (delims.kind_of?(Array) && delims.length>0) ? delims[0] : "|"
     @item_delim = (delims.kind_of?(Array) && delims.length>1) ? delims[1] : "^"
+    @repetition_delim = (delims.kind_of?(Array) && delims.length>2) ? delims[2] : "~"
 
     if (raw_segment.kind_of? Array)
       @elements = raw_segment
@@ -414,6 +418,22 @@ class HL7::Message::Segment
     else
       has_children [ child_type.to_sym ]
     end
+  end
+
+  # breaks each element string value into separate components
+  # returns an array - may be two dimmensional for fields that allow repetition
+  #   ex: "ADT^A04" => ["ADT", "A04"]
+  #   ex: "(609)222-3333^ORN^CP^^^609^2223333~WILLQ@gmail.com^NET^X.400^^^WILLQ@gmail.com" =>
+  #       [ ["(609)222-3333", "ORN", "CP", "", "", "609", "2223333"],
+  #         ["WILLQ@gmail.com", "NET", "X.400", "", "", "WILLQ@gmail.com"] ]
+  def parse_element(element)
+    values = send(element.to_sym).split(@repetition_delim)
+    item = []
+    values.length > 1 ?
+      values.each  { |str| item << str.split(@item_delim) } :
+      item = values.first.split(@item_delim)
+
+    item
   end
 
   def to_info
