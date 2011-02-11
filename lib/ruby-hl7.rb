@@ -427,11 +427,13 @@ class HL7::Message::Segment
   #       [ ["(609)222-3333", "ORN", "CP", "", "", "609", "2223333"],
   #         ["WILLQ@gmail.com", "NET", "X.400", "", "", "WILLQ@gmail.com"] ]
   def parse_element(element)
-    values = send(element.to_sym).split(@repetition_delim)
     item = []
-    values.length > 1 ?
-      values.each  { |str| item << str.split(@item_delim) } :
-      item = values.first.split(@item_delim)
+    unless send(element.to_sym).blank?
+      values = send(element.to_sym).split(@repetition_delim)
+      values.length > 1 ?
+        values.each  { |str| item << str.split(@item_delim) } :
+        item = values.first.split(@item_delim)
+    end
 
     item
   end
