@@ -5,11 +5,16 @@ require 'ruby-hl7'
 describe HL7::Message do
   context 'basic parsing' do
     before :all do
+      @hl7_message = open('./test_data/clin_lab_test.hl7').read
       @simple_msh_txt = open( './test_data/test.hl7' ).readlines.first
       @empty_txt = open( './test_data/empty.hl7' ).readlines.first
       @empty_segments_txt = open( './test_data/empty_segments.hl7' ).readlines.first
       @base_msh = "MSH|^~\\&|LAB1||DESTINATION||19910127105114||ORU^R03|LAB1003929"
       @base_msh_alt_delims = "MSH$@~\\&|LAB1||DESTINATION||19910127105114||ORU^R03|LAB1003929"
+    end
+    
+    it 'parses a full message' do
+      msg = HL7::Message.new(@hl7_message)
     end
 
     it 'parses simple text' do
