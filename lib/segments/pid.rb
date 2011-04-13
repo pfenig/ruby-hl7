@@ -46,4 +46,5 @@ class HL7::Message::Segment::PID < HL7::Message::Segment
   add_field :strain
   add_field :production_class_code
   add_field :tribal_citizenship
+  add_field :emergency_contact, :idx => 40
 end
